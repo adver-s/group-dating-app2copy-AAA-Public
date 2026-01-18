@@ -1,0 +1,122 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+
+# next.js
+/.next/
+apps/web/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+.env
+.env.production
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Database files
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.backup
+*.backup2
+*.broken
+
+# Archives
+*.tgz
+*.tar.gz
+*.zip
+
+# Test files
+test-*.jpg
+test-*.png
+test-results/
+
+# Debug and test files (for production)
+app/debug/
+app/test-*/
+app/api/debug/
+app/api/test-*/
+__tests__/
+tests/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Playground (development only)
+tools/playground/
+
+# Development only files
+scripts/create_test_users.ts
+scripts/create-ecs-roles.js
+scripts/create_missing_user.js
+check_team_photos.js
+
+# Logs
+logs/
+*.log
+
+# Uploads (development only)
+uploads/
+
+# Video files (development only)
+*.mp4
+*.mov
+*.avi
+
+# AWS deployment files
+aws接続メモ/
+docs/aws-connection-memos/
+
+# Data directory (now using database)
+data/
+
+# monorepo additions
+/apps/*/.env
+/packages/*/.env
+/infra/.env
+.terraform/
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+coverage/
+dist/
+build/
+
+# uploads and logs (kept out of VCS)
+uploads/
+logs/
+
+# lockfile preference (keep npm)
+yarn.lock
+
+.env.e2e.local
+

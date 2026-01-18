@@ -1,0 +1,11 @@
+email,username,gender,age
+alice@example.com,alice,1,25
+bob@example.com,bob,2,28
+charlie@example.com,charlie,2,30
+diana@example.com,diana,1,24
+emma@example.com,emma,1,26
+frank@example.com,frank,2,29
+grace@example.com,grace,1,27
+henry@example.com,henry,2,31
+iris@example.com,iris,1,23
+jack@example.com,jack,2,32 

@@ -1,0 +1,7 @@
+                                                                    onChange={(v: VoteStatus) => {
+                                                                        console.log(`${member.name}の投票: ${v}`);
+                                                                        updateVoteState(item.id, member.id, v);
+                                                                        // サーバ�E雁E��へ送信して全員一致判定�EAPIで行う
+                                                                        (async () => { try { await fetch('/api/meeting/vote', { method:'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify({ itemId: item.id, vote: v }) }) } catch {} })();
+                                                                    }}
+                                                                />

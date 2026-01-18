@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  dating-app:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+      target: development
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=file:./apps/api/prisma/dev.db
+      - JWT_SECRET_KEY=dev-secret-key-change-this-in-production
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+      - NEXT_PUBLIC_API_URL=http://localhost:3000/api
+      - NEXT_PUBLIC_BASE_URL=http://localhost:3000
+      - HOSTNAME=0.0.0.0
+      - PORT=3000
+    volumes:
+      - ..:/app
+      - /app/node_modules
+      - /app/apps/web/node_modules
+      - /app/apps/api/node_modules
+      - /app/packages
+    working_dir: /app

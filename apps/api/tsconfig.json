@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "moduleResolution": "node",
+    "paths": {
+      "@/utils/*": ["./utils/*"],
+      "@/types": ["./types/index"],
+      "@/types/*": ["./types/*"],
+      "@/prisma": ["./apps/api/lib/prisma"],
+      "@/api/*": ["./apps/api/*"],
+      "@repo/schema": ["./packages/schema/dist/index"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "../../utils/**/*.ts",
+    "../../types/**/*.ts",
+    "../../lib/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

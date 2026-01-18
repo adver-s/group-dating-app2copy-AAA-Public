@@ -1,0 +1,8 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Alice character silhouette -->
+  <circle cx="100" cy="60" r="25" fill="#FFB6C1"/>
+  <path d="M75 85 Q100 120 125 85 L125 180 L75 180 Z" fill="#FFB6C1"/>
+  <circle cx="90" cy="55" r="3" fill="#000"/>
+  <circle cx="110" cy="55" r="3" fill="#000"/>
+  <path d="M95 65 Q100 70 105 65" stroke="#000" stroke-width="2" fill="none"/>
+</svg>

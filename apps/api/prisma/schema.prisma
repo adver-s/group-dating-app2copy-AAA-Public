@@ -1,0 +1,274 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL_SQL")
+}
+
+model User {
+  id          Int       @id @default(autoincrement()) @map("id")
+  cognito_sub String    @unique @map("cognito_sub")
+  email       String?   @unique @map("email")
+  username    String    @map("username")
+  password_hash String? @map("password_hash")
+  avatar_url  String?   @map("avatar_url")
+  bio         String?   @map("bio")
+  age         Int?      @map("age")
+  gender      Int       @default(0) @map("gender")
+  cancel_rate Int       @default(0) @map("cancel_rate")
+  last_login  DateTime? @map("last_login")
+  created_at  DateTime  @default(now()) @map("created_at")
+  updated_at  DateTime  @updatedAt @map("updated_at")
+  is_active   Boolean   @default(true) @map("is_active")
+  is_verified Boolean   @default(false) @map("is_verified")
+
+  team_members       TeamMember[]
+  user_hidden_groups UserHiddenGroup[]
+  verifications      Verification[]
+
+  @@index([username])
+  @@index([age])
+  @@index([gender])
+  @@map("users")
+}
+
+model Team {
+  id            Int      @id @default(autoincrement()) @map("id")
+  uuid          String   @unique @map("uuid")
+  name          String   @map("name")
+  description   String?  @map("description")
+  gender        Int      @default(1) @map("gender")
+  target_gender Int      @default(1) @map("target_gender")
+  smoke         Int?     @map("smoke")
+  alcohol       Int?     @map("alcohol")
+  created_at    DateTime @default(now()) @map("created_at")
+  updated_at    DateTime @updatedAt @map("updated_at")
+  is_active     Boolean  @default(true) @map("is_active")
+
+  team_members              TeamMember[]
+  team_photos               TeamPhoto[]
+  team_weekdays             TeamWeekday[]
+  team_hobbies              TeamHobby[]
+  team_prefectures          TeamPrefecture[]
+  group_matching_flows_from GroupMatchingFlow[] @relation("GroupMatchingFlowsFrom")
+  group_matching_flows_to   GroupMatchingFlow[] @relation("GroupMatchingFlowsTo")
+  team_matching_flows_from  TeamMatchingFlow[]  @relation("TeamMatchingFlowFrom")
+  team_matching_flows_to    TeamMatchingFlow[]  @relation("TeamMatchingFlowTo")
+  invite_codes              InviteCode[]
+  team_target_genders       TeamTargetGender[]
+  user_hidden_groups        UserHiddenGroup[]
+
+  @@index([name])
+  @@index([gender])
+  @@index([target_gender])
+  @@map("teams")
+}
+
+model TeamMember {
+  id                Int       @id @default(autoincrement()) @map("id")
+  team_id           Int       @map("team_id")
+  user_id           Int       @map("user_id")
+  status            Int       @default(0) @map("status")
+  joined_at         DateTime  @default(now()) @map("joined_at")
+  status_changed_at DateTime? @map("status_changed_at")
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  team Team @relation(fields: [team_id], references: [id], onDelete: Cascade)
+
+  @@unique([team_id, user_id, status])
+  @@index([team_id])
+  @@index([user_id])
+  @@map("team_members")
+}
+
+model TeamPhoto {
+  id            Int      @id @default(autoincrement()) @map("id")
+  team_id       Int      @map("team_id")
+  photo_url     String   @map("photo_url")
+  display_order Int      @default(0) @map("display_order")
+  created_at    DateTime @default(now()) @map("created_at")
+
+  team Team @relation(fields: [team_id], references: [id], onDelete: Cascade)
+
+  @@unique([team_id, display_order])
+  @@index([team_id, display_order])
+  @@map("team_photos")
+}
+
+model TeamWeekday {
+  id         Int      @id @default(autoincrement()) @map("id")
+  team_id    Int      @map("team_id")
+  weekday    Int      @map("weekday")
+  time_slot  Int      @map("time_slot")
+  status     Int      @default(0) @map("status")
+  created_at DateTime @default(now()) @map("created_at")
+
+  team Team @relation(fields: [team_id], references: [id], onDelete: Cascade)
+
+  @@unique([team_id, weekday, time_slot])
+  @@index([team_id])
+  @@index([weekday, time_slot])
+  @@map("team_weekdays")
+}
+
+model TeamHobby {
+  id         Int      @id @default(autoincrement()) @map("id")
+  team_id    Int      @map("team_id")
+  hobby_tag  Int      @map("hobby_tag")
+  created_at DateTime @default(now()) @map("created_at")
+
+  team Team @relation(fields: [team_id], references: [id], onDelete: Cascade)
+
+  @@unique([team_id, hobby_tag])
+  @@index([team_id])
+  @@index([hobby_tag])
+  @@map("team_hobbies")
+}
+
+model TeamPrefecture {
+  id              Int      @id @default(autoincrement()) @map("id")
+  team_id         Int      @map("team_id")
+  prefecture_code Int      @map("prefecture_code")
+  status          Int      @default(0) @map("status")
+  created_at      DateTime @default(now()) @map("created_at")
+
+  team Team @relation(fields: [team_id], references: [id], onDelete: Cascade)
+
+  @@unique([team_id, prefecture_code])
+  @@index([team_id])
+  @@index([prefecture_code])
+  @@map("team_prefectures")
+}
+
+model GroupMatchingFlow {
+  id            Int      @id @default(autoincrement()) @map("id")
+  uuid          String   @unique @map("uuid")
+  from_group_id Int      @map("from_group_id")
+  to_group_id   Int      @map("to_group_id")
+  status        Int      @default(0) @map("status")
+  created_at    DateTime @default(now()) @map("created_at")
+  updated_at    DateTime @updatedAt @map("updated_at")
+
+  from_group Team       @relation("GroupMatchingFlowsFrom", fields: [from_group_id], references: [id], onDelete: Cascade)
+  to_group   Team       @relation("GroupMatchingFlowsTo", fields: [to_group_id], references: [id], onDelete: Cascade)
+  chat_rooms ChatRoom[]
+
+  @@unique([from_group_id, to_group_id])
+  @@index([from_group_id])
+  @@index([to_group_id])
+  @@index([status])
+  @@map("group_matching_flows")
+}
+
+model UserHiddenGroup {
+  id              Int       @id @default(autoincrement()) @map("id")
+  user_id         Int       @map("user_id")
+  hidden_group_id Int       @map("hidden_group_id")
+  status          Int       @map("status")
+  hidden_start    DateTime  @default(now()) @map("hidden_start")
+  hidden_until    DateTime? @map("hidden_until")
+  reason          String?   @map("reason")
+  created_at      DateTime  @default(now()) @map("created_at")
+  updated_at      DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  team Team @relation(fields: [hidden_group_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, hidden_group_id, status])
+  @@index([user_id])
+  @@index([hidden_group_id])
+  @@index([status])
+  @@map("user_hidden_groups")
+}
+
+model ChatRoom {
+  id               Int       @id @default(autoincrement()) @map("id")
+  matching_flow_id Int       @map("matching_flow_id")
+  last_message_at  DateTime? @map("last_message_at")
+  created_at       DateTime  @default(now()) @map("created_at")
+  is_active        Boolean   @default(true) @map("is_active")
+
+  group_matching_flow GroupMatchingFlow @relation(fields: [matching_flow_id], references: [id], onDelete: Cascade)
+
+  @@index([matching_flow_id])
+  @@index([last_message_at])
+  @@map("chat_rooms")
+}
+
+model Verification {
+  id              Int      @id @default(autoincrement()) @map("id")
+  user_id         Int      @map("user_id")
+  document_type   String   @map("document_type") // drivers_license, passport, national_id, etc.
+  document_number String?  @map("document_number")
+  document_image  String   @map("document_image") // S3パスまたはローカルパス
+  status          String   @default("pending") @map("status") // pending, approved, rejected
+  submitted_at    DateTime @default(now()) @map("submitted_at")
+  reviewed_at     DateTime? @map("reviewed_at")
+  reviewed_by     String?  @map("reviewed_by") // 承認者のID
+  rejection_reason String? @map("rejection_reason")
+  admin_notes     String?  @map("admin_notes")
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([status])
+  @@map("verifications")
+}
+
+model InviteCode {
+  id         String   @id @map("id")
+  code       String   @unique @map("code")
+  team_id    Int      @map("team_id")
+  created_by Int      @map("created_by")
+  created_at DateTime @default(now()) @map("created_at")
+  expires_at DateTime? @map("expires_at")
+
+  team Team @relation(fields: [team_id], references: [id], onDelete: Cascade)
+
+  @@index([team_id])
+  @@map("invite_codes")
+}
+
+model TeamTargetGender {
+  id            String   @id @map("id")
+  team_id       Int      @map("team_id")
+  target_gender Int      @map("target_gender")
+  created_at    DateTime @default(now()) @map("created_at")
+
+  team Team @relation(fields: [team_id], references: [id], onDelete: Cascade)
+
+  @@index([team_id])
+  @@map("team_target_genders")
+}
+
+model TeamMatchingFlow {
+  id             String   @id @map("id")
+  matching_id    String   @unique @map("matching_id")
+  from_group_id  Int      @map("from_group_id")
+  to_group_id    Int      @map("to_group_id")
+  status         Int      @default(0) @map("status")
+  created_at     DateTime @default(now()) @map("created_at")
+  updated_at     DateTime @default(now()) @map("updated_at")
+
+  from_group Team @relation("TeamMatchingFlowFrom", fields: [from_group_id], references: [id], onDelete: Cascade)
+  to_group   Team @relation("TeamMatchingFlowTo", fields: [to_group_id], references: [id], onDelete: Cascade)
+
+  @@index([from_group_id])
+  @@index([to_group_id])
+  @@index([status])
+  @@map("team_matching_flows")
+}
+
+model GroupMemberJudgement {
+  id         String   @id @map("id")
+  matchingId String   @map("matchingId")
+  userId     String   @map("userId")
+  groupId    String   @map("groupId")
+  judgement  String   @map("judgement")
+  updatedAt  DateTime @default(now()) @map("updatedAt")
+
+  @@unique([matchingId, userId])
+  @@map("group_member_judgements")
+}

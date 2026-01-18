@@ -1,0 +1,10 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rabbit character silhouette -->
+  <ellipse cx="100" cy="80" rx="30" ry="40" fill="#F5F5DC"/>
+  <ellipse cx="85" cy="50" rx="8" ry="15" fill="#F5F5DC"/>
+  <ellipse cx="115" cy="50" rx="8" ry="15" fill="#F5F5DC"/>
+  <circle cx="95" cy="75" r="3" fill="#000"/>
+  <circle cx="105" cy="75" r="3" fill="#000"/>
+  <ellipse cx="100" cy="85" rx="3" ry="2" fill="#FF6B6B"/>
+  <path d="M70 100 Q100 120 130 100" stroke="#F5F5DC" stroke-width="8" fill="none"/>
+</svg>

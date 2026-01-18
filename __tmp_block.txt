@@ -1,0 +1,35 @@
+            // 蜈ｨ蜩｡縺ｮ謚慕･ｨ迥ｶ豕√ｒ繝√ぉ繝・け
+            const itemVotes = newStates[itemId];
+            if (itemVotes && Object.keys(itemVotes).length === members.length) {
+                const allLiked = Object.values(itemVotes).every((vote: VoteStatus) => vote === 'YES');
+                const allRejected = Object.values(itemVotes).every((vote: VoteStatus) => vote === 'NO');
+
+                if (allLiked || allRejected) {
+                    // 迴ｾ蝨ｨ縺ｮ繧ｿ繝悶・繝・・繧ｿ縺九ｉ隧ｲ蠖薙い繧､繝・Β繧貞叙蠕・
+                    let targetItem;
+                    if (activeTab === 'sent') {
+                        targetItem = sent.find((item: MeetingItem) => item.id === itemId);
+                    } else if (activeTab === 'received') {
+                        targetItem = received.find((item: MeetingItem) => item.id === itemId);
+                    } else if (activeTab === 'hold') {
+                        targetItem = hold.find((item: MeetingItem) => item.id === itemId);
+                    }
+
+                    if (targetItem) {
+                        // 蜿励￠蜿悶▲縺溘♀隱倥＞繝壹・繧ｸ縺ｧ蜈ｨ蜩｡縺後後≠繧翫阪↓縺励◆蝣ｴ蜷医・迚ｹ蛻･縺ｪ繝｡繝・そ繝ｼ繧ｸ
+                        const bannerMessage = activeTab === 'received' && allLiked
+                            ? '蜈ｨ蜩｡縺薫K縺励∪縺励◆・・
+                            : allLiked ? '蜈ｨ蜩｡縺後＞縺・・縺励∪縺励◆・・ : '蜈ｨ蜩｡縺後ヶ繝・メ縺励∪縺励◆・・;
+
+                        setShowBanner({
+                            itemId,
+                            teamName: targetItem.teamName,
+                            description: targetItem.description,
+                            image: targetItem.image,
+                            voteType: allLiked ? 'like' : 'reject',
+                            message: bannerMessage
+                        });
+                    }
+                }
+            }
+

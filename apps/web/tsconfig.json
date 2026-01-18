@@ -1,0 +1,46 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "moduleResolution": "node",
+    "paths": {
+      "@/utils/*": ["./utils/*"],
+      "@/types": ["./types/index"],
+      "@/types/*": ["./types/*", "./apps/web/types/*"],
+      "@/prisma": ["./apps/api/lib/prisma"],
+      "@/api/*": ["./apps/api/*"],
+      "@/app/*": ["./apps/web/app/*"],
+      "@/components/*": ["./apps/web/components/*"],
+      "@/lib/*": ["./apps/web/lib/*"],
+      "@/middleware/*": ["./apps/web/middleware/*"],
+      "@repo/schema": ["./packages/schema/dist/index"],
+      "@repo/ui": ["./packages/ui/dist/index"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "allowJs": true,
+    "noEmit": true,
+    "isolatedModules": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "../../lib/**/*.ts",
+    "../../types/**/*.ts",
+    "../../utils/**/*.ts",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "app/api/**/*",
+    "./app/api/**/*"
+  ]
+}
